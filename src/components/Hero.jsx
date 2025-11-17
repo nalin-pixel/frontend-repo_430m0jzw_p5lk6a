@@ -1,7 +1,9 @@
 import Spline from '@splinetool/react-spline'
 import { motion } from 'framer-motion'
+import { useI18n } from '../i18n'
 
 export default function Hero() {
+  const { t } = useI18n()
   return (
     <section className="relative min-h-[90vh] w-full overflow-hidden">
       <div className="absolute inset-0">
@@ -12,16 +14,16 @@ export default function Hero() {
 
       <div className="relative mx-auto flex h-[90vh] max-w-7xl flex-col items-center justify-center px-6 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: 'easeOut' }} className="space-y-6">
-          <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/80">Cocina Andaluza Moderna</span>
+          <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1 text-xs uppercase tracking-[0.2em] text-white/80">{t('hero.badge')}</span>
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif leading-[1.05] text-white drop-shadow-lg">
-            Sueño Andaluz
+            {t('hero.title')}
           </h1>
           <p className="mx-auto max-w-2xl text-base sm:text-lg text-white/90">
-            A contemporary homage to the flavors, rhythms, and warmth of Southern Spain. Fire-kissed tapas, seasonal seafood, and wines from sunlit hillsides.
+            {t('hero.desc')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <a href="#reservations" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-red-600 px-6 py-3 text-white font-semibold shadow-lg shadow-rose-900/20">Reserve a Table</a>
-            <a href="#menu" className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-white/90 hover:bg-white/20">Explore the Menu</a>
+            <a href="#reservations" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-red-600 px-6 py-3 text-white font-semibold shadow-lg shadow-rose-900/20">{t('hero.ctaReserve')}</a>
+            <a href="#menu" className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-white/90 hover:bg-white/20">{t('hero.ctaMenu')}</a>
           </div>
         </motion.div>
       </div>
