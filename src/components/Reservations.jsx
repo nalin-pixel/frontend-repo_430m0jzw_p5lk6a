@@ -2,20 +2,44 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n'
 
+const API_BASE = import.meta.env.VITE_BACKEND_URL || ''
+
 export default function Reservations() {
   const { t } = useI18n()
-  const [form, setForm] = useState({ name: '', email: '', date: '', time: '', guests: 2 })
-  const [status, setStatus] = useState('idle')
+  const [form, setForm] = useState({ name: '', email: '', date: '', time: '', guests: 2, notes: '' })
+  const [status, setStatus] = useState('idle') // idle | loading | done | error
+  const [message, setMessage] = useState('')
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
     setStatus('loading')
-    setTimeout(() => setStatus('done'), 1000)
+    setMessage('')
+    try {
+      const res = await fetch(`${API_BASE}/api/reservations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          date: form.date,
+          time: form.time,
+          guests: Number(form.guests),
+          notes: form.notes || undefined,
+        }),
+      })
+      if (!res.ok) throw new Error(await res.text())
+      setStatus('done')
+      setMessage('✓ ' + (t('reservations.reserved') || 'Reserved'))
+      setForm({ name: '', email: '', date: '', time: '', guests: 2, notes: '' })
+    } catch (err) {
+      setStatus('error')
+      setMessage('Error booking. Please try again.')
+    }
   }
 
   return (
     <div className="grid gap-10 md:grid-cols-2">
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-white">
+      <div className="relative rounded-2xl border border-white/10 bg-white/5 p-6 text-white">
         <h3 className="mb-4 font-serif text-2xl">{t('reservations.title')}</h3>
         <form onSubmit={submit} className="grid gap-4">
           <div>
@@ -40,9 +64,16 @@ export default function Reservations() {
             <label className="mb-1 block text-sm text-white/70">{t('reservations.guests')}</label>
             <input type="number" min="1" max="10" value={form.guests} onChange={(e) => setForm({ ...form, guests: e.target.value })} required className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-white outline-none focus:ring-2 focus:ring-rose-500/40" />
           </div>
-          <motion.button whileTap={{ scale: 0.98 }} disabled={status !== 'idle'} className="mt-2 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-red-600 px-6 py-3 font-semibold text-white disabled:opacity-60">
-            {status === 'loading' ? t('reservations.booking') : status === 'done' ? t('reservations.reserved') : t('reservations.reserve')}
+          <div>
+            <label className="mb-1 block text-sm text-white/70">Notes</label>
+            <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={3} className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-white placeholder-white/40 outline-none focus:ring-2 focus:ring-rose-500/40" placeholder="Allergies, celebrations..." />
+          </div>
+          <motion.button whileTap={{ scale: 0.98 }} disabled={status === 'loading'} className="mt-2 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-red-600 px-6 py-3 font-semibold text-white disabled:opacity-60">
+            {status === 'loading' ? t('reservations.booking') : t('reservations.reserve')}
           </motion.button>
+          {message && (
+            <p className={`text-sm ${status === 'error' ? 'text-rose-400' : 'text-emerald-400'}`}>{message}</p>
+          )}
         </form>
       </div>
       <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-white">

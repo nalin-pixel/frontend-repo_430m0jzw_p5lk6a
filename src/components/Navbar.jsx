@@ -15,6 +15,10 @@ export default function Navbar() {
     { to: '/contact', label: t('nav.contact') },
   ]
 
+  const linkBase = 'transition-colors px-3 py-2 rounded-xl'
+  const active = 'text-white bg-white/10 border border-white/10'
+  const idle = 'text-white/80 hover:text-white'
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -28,12 +32,12 @@ export default function Navbar() {
               </div>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6 text-white/90">
+            <nav className="hidden md:flex items-center gap-2 text-white/90">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
-                  className={({ isActive }) => `transition-colors ${isActive ? 'text-white' : 'hover:text-white'}`}
+                  className={({ isActive }) => `${linkBase} ${isActive ? active : idle}`}
                 >
                   {item.label}
                 </NavLink>

@@ -1,6 +1,7 @@
 import Spline from '@splinetool/react-spline'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n'
+import { Link } from 'react-router-dom'
 
 export default function Hero() {
   const { t } = useI18n()
@@ -22,8 +23,8 @@ export default function Hero() {
             {t('hero.desc')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-            <a href="#reservations" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-red-600 px-6 py-3 text-white font-semibold shadow-lg shadow-rose-900/20">{t('hero.ctaReserve')}</a>
-            <a href="#menu" className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-white/90 hover:bg-white/20">{t('hero.ctaMenu')}</a>
+            <Link to="/reservations" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-red-600 px-6 py-3 text-white font-semibold shadow-lg shadow-rose-900/20">{t('hero.ctaReserve')}</Link>
+            <Link to="/menu" className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 py-3 text-white/90 hover:bg-white/20">{t('hero.ctaMenu')}</Link>
           </div>
         </motion.div>
       </div>
